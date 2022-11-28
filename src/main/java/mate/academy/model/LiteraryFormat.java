@@ -1,4 +1,4 @@
-package mate.academy.models;
+package mate.academy.model;
 
 public class LiteraryFormat {
     private Long id;

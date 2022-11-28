@@ -19,7 +19,7 @@ public class ConnectionUtil {
             Properties dbProperties = new Properties(); // в dbProperties устанавливаем кредлы для входа в DB
             dbProperties.put("user", "root");
             dbProperties.put("password", "mysql2022");
-            System.out.println("Connected");
+//            System.out.println("Connected");
             return DriverManager.getConnection("jdbc:mysql://localhost:3306/library_db", dbProperties); //создали connection
         } catch (SQLException throwables) {
             throw new RuntimeException("Can't create connection to DB", throwables);

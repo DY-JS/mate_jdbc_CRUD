@@ -1,11 +1,12 @@
 package mate.academy.dao;
 
-import mate.academy.models.LiteraryFormat;
+import mate.academy.model.LiteraryFormat;
 import mate.academy.util.ConnectionUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LiteraryFormatDaoImpl implements LiteraryFormatDao{
 
@@ -56,6 +57,26 @@ public class LiteraryFormatDaoImpl implements LiteraryFormatDao{
 
       return  format;
     }
+
+    @Override
+    public Optional<LiteraryFormat> get(Long id) {
+        String getByIdRequest = "SELECT * FROM literary_formats WHERE id = ? AND is_deleted = FALSE;";
+        LiteraryFormat literaryFormat = null;
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement getLiteraryFormatByIdStatement =
+                     connection.prepareStatement(getByIdRequest)) {
+            getLiteraryFormatByIdStatement.setLong(1, id);
+            ResultSet resultSet = getLiteraryFormatByIdStatement.executeQuery();
+            if (resultSet.next()) {
+                literaryFormat = new LiteraryFormat();
+                literaryFormat.setId(resultSet.getObject("id", Long.class));
+                literaryFormat.setFormat(resultSet.getString("format"));
+            }
+            return Optional.ofNullable(literaryFormat);
+        } catch (SQLException e) {
+            throw new RuntimeException("Can't get from DB format by id=" + id, e);
+        }
+    };
 
     @Override // При delete мы физически не удаляем записи(softdelete), а ставим отметки в поле is_deleted
     public boolean delete(Long id) {
